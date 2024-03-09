@@ -1,0 +1,44 @@
+name: package
+
+on:
+  release:
+    types: [ published ]
+
+env:
+  GH_TOKEN: ${{ secrets.GH_TOKEN }}
+  GH_USERNAME: dangdinhtai0001
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      # -----------------------------------
+      - run: echo "RELEASE_VERSION=${{ github.event.release.tag_name }}" >> $GITHUB_ENV
+      # -----------------------------------
+      - uses: actions/checkout@v4
+        with:
+          ref: refs/tags/${{ env.RELEASE_VERSION }}
+      # -----------------------------------
+      - name: Set outputs
+        id: vars
+        run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+      # -----------------------------------
+      - uses: actions/setup-java@v4
+        with:
+          distribution: "corretto"
+          java-version: 21
+      # -----------------------------------
+      - uses: actions/cache@v3
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
+          restore-keys: ${{ runner.os }}-gradle
+      # -----------------------------------
+      - name: build and publish
+        run: |
+          echo "registry=https://maven.pkg.github.com/dangdinhtai0001/whispers" >> gradle.properties
+          echo "//maven.pkg.github.com/dangdinhtai0001/whispers/:username=\${{ env.GH_USERNAME }}" >> gradle.properties
+          echo "//maven.pkg.github.com/dangdinhtai0001/whispers/:password=\${{ env.GH_TOKEN }}" >> gradle.properties
+          echo "version=${{  env.RELEASE_VERSION  }}" >> gradle.properties
+          bash gradlew clean
+          bash gradlew build -x test
+          bash gradlew publish

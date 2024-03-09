@@ -33,6 +33,17 @@ publishing {
         maven {
             name = "whispers"
             url = "https://github.com/dangdinhtai0001/whispers"
+            credentials {
+                username = project.findProperty("gpr.gh_username") ?: System.getenv("GH_USERNAME")
+                password = project.findProperty("gpr.gh_token") ?: System.getenv("GH_TOKEN")
+            }
         }
+    }
+
+    publications {
+        gpr(MavenPublication) {
+            from(components.java)
+        }
+
     }
 }

@@ -5,7 +5,6 @@ plugins {
 }
 
 group = 'vn.eclipse'
-version = '0.0.1-beta.0'
 
 repositories {
     mavenCentral()
@@ -31,7 +30,7 @@ kotlin {
 publishing {
     repositories {
         maven {
-            name = "whispers"
+            name = "GitHubPackages"
             url = "https://github.com/dangdinhtai0001/whispers"
             credentials {
                 username = project.findProperty("gpr.gh_username") ?: System.getenv("GH_USERNAME")
@@ -42,8 +41,7 @@ publishing {
 
     publications {
         gpr(MavenPublication) {
-            from(components.java)
+            from components.java
         }
-
     }
 }

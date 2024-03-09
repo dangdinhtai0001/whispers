@@ -31,7 +31,7 @@ publishing {
     repositories {
         maven {
             name = "GitHubPackages"
-            url = "https://github.com/dangdinhtai0001/whispers"
+            url = "https://maven.pkg.github.com/dangdinhtai0001/whispers"
             credentials {
                 username = project.findProperty("gpr.gh_username") ?: System.getenv("GH_USERNAME")
                 password = project.findProperty("gpr.gh_token") ?: System.getenv("GH_TOKEN")

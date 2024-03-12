@@ -11,7 +11,7 @@ import java.util.concurrent.ConcurrentHashMap
  * **Work context instances are thread-safe.**
  *
  */
-class TaskContext {
+open class TaskContext {
     private val context: MutableMap<String, Any> = ConcurrentHashMap()
 
     companion object {

@@ -12,7 +12,7 @@ import java.util.concurrent.ConcurrentHashMap
  *
  */
 open class TaskContext {
-    private val context: MutableMap<String, Any> = ConcurrentHashMap()
+    private val context: MutableMap<String, Any?> = ConcurrentHashMap()
 
     companion object {
         private val log: Logger = LoggerFactory.getLogger(TaskContext::class.java)
@@ -22,7 +22,7 @@ open class TaskContext {
         PROCESSED_TASKS,
     }
 
-    fun put(key: String, value: Any, force: Boolean = false) {
+    fun put(key: String, value: Any?, force: Boolean = false) {
         if (!force && key in DefaultKey.entries.map { it.name }) {
             log.info("Warning: Key '$key' is a default key.")
         } else {
@@ -34,7 +34,7 @@ open class TaskContext {
         return context[key]
     }
 
-    val entrySet: Set<Map.Entry<String, Any>>
+    val entrySet: Set<Map.Entry<String, Any?>>
         get() = context.entries
 
     override fun toString(): String {
